@@ -1,51 +1,65 @@
-# PasswordlessAuth
+# Passwordless Authentication App
 
-Minimalna demonstracija passwordless autentikacije sa sledecim funkcijama:
+Node.js/Express demonstracija passwordless autentikacije za potrebe projekta (diplomskog rada), sa fokusom na sigurnu prijavu bez lozinke i oporavak pristupa nalogu.
 
-- Magic link login sa kriptografski jakim, vremenski ogranicenim i single-use tokenom
-- TOTP (Google Authenticator kompatibilan) sa QR kodom
-- Rate limiting i lockout nakon vise neuspelih pokusaja
-- Recovery preko sekundarnog email-a, recovery tokena i recovery kodova
-- Trusted device mehanizam
-- Audit i auth logovi
+## Funkcionalnosti
 
-## Pokretanje
+- Magic link prijava sa vremenski ogranicenim i jednokratnim tokenom
+- TOTP (Google Authenticator kompatibilan) sa QR aktivacijom
+- Rate limiting i privremeni lockout nakon vise neuspelih pokusaja
+- Recovery tokovi: sekundarni email, recovery link i recovery kodovi
+- Audit i login attempt logovanje dogadjaja
 
-1. Instaliraj zavisnosti:
+## Tehnologije
+
+- Node.js
+- Express
+- SQLite
+- EJS
+- Nodemailer
+- Speakeasy (TOTP)
+
+## Pokretanje projekta
+
+1. Instalirati zavisnosti:
 
 ```bash
 npm install
 ```
 
-2. Kopiraj `.env.example` u `.env` po potrebi.
+2. Pripremiti konfiguraciju:
 
-3. Pokreni aplikaciju:
+- Kopirati `.env.example` u `.env`
+- Podesiti vrednosti promenljivih po potrebi
 
-```bash
-npm run dev
-```
-
-ili
+3. Pokrenuti aplikaciju:
 
 ```bash
 npm start
 ```
 
-4. Otvori `http://localhost:3000`
+Za development mod moze i:
 
-## Tok demonstracije
+```bash
+npm run dev
+```
 
-1. Unesi email i zatrazi magic link.
-2. Otvori SMTP preview link koji aplikacija prikaze u UI-ju.
-3. Klikni magic link.
-4. Nakon prijave postavi sekundarni email i aktiviraj TOTP.
-5. Sacuvaj recovery kodove.
-6. Sledeci magic link login ce traziti i TOTP, osim ako oznacis uredjaj kao trusted.
+4. Otvoriti aplikaciju na:
 
-## Fajlovi
+`http://localhost:3000`
 
-- `server.js` - bootstrap Express servera
-- `src/authRoutes.js` - auth, TOTP i recovery tokovi
-- `src/db.js` - SQLite schema
-- `logs/auth.log` - fajl log za auth i audit dogadjaje
-- `db/app.db` - SQLite baza
+## Brzi demo scenario
+
+1. Uneti email i zatraziti magic link.
+2. Otvoriti SMTP preview link prikazan u aplikaciji.
+3. Potvrditi prijavu preko magic linka.
+4. Aktivirati TOTP i sacuvati recovery kodove.
+5. Testirati recovery prijavu (link ili recovery kod).
+
+## Struktura projekta
+
+- `server.js` - inicijalizacija Express servera
+- `src/authRoutes.js` - autentikacioni i recovery tokovi
+- `src/db.js` - inicijalizacija baze i schema
+- `src/security.js` - token/hash pomocne funkcije
+- `views/` - EJS prikazi
