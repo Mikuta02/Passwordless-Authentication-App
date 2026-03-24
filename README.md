@@ -1,14 +1,13 @@
 # Passwordless Authentication App
 
-Node.js/Express demonstracija passwordless autentikacije za potrebe projekta (diplomskog rada), sa fokusom na sigurnu prijavu bez lozinke i oporavak pristupa nalogu.
+Node.js/Express demonstracija passwordless autentifikacije za potrebe projekta (diplomskog rada), sa fokusom na sigurnu prijavu bez lozinke i oporavak pristupa nalogu.
 
 ## Funkcionalnosti
 
 - Magic link prijava sa vremenski ogranicenim i jednokratnim tokenom
 - TOTP (Google Authenticator kompatibilan) sa QR aktivacijom
-- Rate limiting i privremeni lockout nakon vise neuspelih pokusaja
+- Rate limiting i privremeni lockout nakon vise neuspesnih pokusaja
 - Recovery tokovi: sekundarni email, recovery link i recovery kodovi
-- Audit i login attempt logovanje dogadjaja
 
 ## Tehnologije
 
@@ -59,7 +58,7 @@ npm run dev
 ## Struktura projekta
 
 - `server.js` - inicijalizacija Express servera
-- `src/authRoutes.js` - autentikacioni i recovery tokovi
+- `src/authRoutes.js` - autentifikacioni i recovery tokovi
 - `src/db.js` - inicijalizacija baze i schema
 - `src/security.js` - token/hash pomocne funkcije
 - `views/` - EJS prikazi
