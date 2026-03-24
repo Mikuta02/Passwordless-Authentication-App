@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="sr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= config.appName %></title>
+    <style>
+      :root {
+        --bg: #060b14;
+        --panel: #0f1726;
+        --ink: #f3f7ff;
+        --muted: #9fb2d1;
+        --accent: #3b82f6;
+        --accent-soft: #14223d;
+        --ok: #34d399;
+        --error: #fb7185;
+        --border: #213251;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Inter", Roboto, sans-serif;
+        background: radial-gradient(circle at top left, #0f1d36 0%, var(--bg) 45%, #030712 100%);
+        color: var(--ink);
+      }
+
+      .shell {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 32px 18px 60px;
+        position: relative;
+      }
+
+      .shell::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(47, 111, 235, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(47, 111, 235, 0.04) 1px, transparent 1px);
+        background-size: 32px 32px;
+        mask-image: radial-gradient(circle at 20% 20%, black, transparent 70%);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: 0 20px 44px rgba(2, 8, 23, 0.45);
+        transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::after {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        border-radius: 20px;
+        background: linear-gradient(130deg, rgba(47, 111, 235, 0.16), transparent 30%, transparent 70%, rgba(47, 111, 235, 0.12));
+        opacity: 0;
+        transition: opacity 0.25s ease;
+        pointer-events: none;
+      }
+
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 42px rgba(16, 36, 62, 0.12);
+        border-color: #b8c9ea;
+      }
+
+      .card:hover::after {
+        opacity: 1;
+      }
+
+      .hero h1 {
+        font-size: clamp(2rem, 5vw, 4.2rem);
+        margin: 0 0 12px;
+        line-height: 0.96;
+      }
+
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--accent);
+        font-size: 0.75rem;
+        margin-bottom: 14px;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+      }
+
+      form {
+        display: grid;
+        gap: 12px;
+      }
+
+      label {
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+
+      input {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        font: inherit;
+        background: #0b1424;
+        color: var(--ink);
+      }
+
+      input:focus {
+        outline: 2px solid rgba(47, 111, 235, 0.24);
+        outline-offset: 1px;
+        border-color: var(--accent);
+      }
+
+      button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 18px;
+        font: inherit;
+        font-weight: 700;
+        background: linear-gradient(135deg, #60a5fa, var(--accent));
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 8px 22px rgba(59, 130, 246, 0.35);
+      }
+
+      button:hover {
+        filter: brightness(1.03);
+        transform: translateY(-1px);
+      }
+
+      .secondary {
+        background: var(--accent-soft);
+        color: var(--ink);
+        box-shadow: none;
+      }
+
+      .flash {
+        margin-bottom: 18px;
+        border-radius: 16px;
+        padding: 14px 16px;
+        border: 1px solid var(--border);
+      }
+
+      .flash.success {
+        background: #0c2a27;
+        color: var(--ok);
+        border-color: #1d4f4a;
+      }
+
+      .flash.error {
+        background: #32121a;
+        color: var(--error);
+        border-color: #5b2330;
+      }
+
+      .code-list {
+        display: grid;
+        gap: 8px;
+        padding: 0;
+        list-style: none;
+      }
+
+      .code-list li,
+      .device-row,
+      .preview {
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #0b1424;
+        border: 1px solid var(--border);
+        word-break: break-word;
+      }
+
+      .inline {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .inline input[type='checkbox'] {
+        width: auto;
+      }
+
+      .status {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-size: 0.82rem;
+        border: 1px solid rgba(47, 111, 235, 0.18);
+      }
+
+      a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      img.qr {
+        width: min(240px, 100%);
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: #f8fbff;
+        padding: 10px;
+      }
+
+      @media (max-width: 860px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .card,
+        .card::after,
+        button {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <% if (flash) { %>
+        <div class="flash <%= flash.type %>">
+          <strong><%= flash.text %></strong>
+          <% if (flash.hint) { %>
+            <div class="muted" style="margin-top: 6px"><%= flash.hint %></div>
+          <% } %>
+        </div>
+      <% } %>
+
+      <section class="hero">
+        <article class="card">
+          <div class="eyebrow">Passwordless Autentifikacija</div>
+          <h1>Magic link, Time-Based One-Time Password i recovery na delu.</h1>
+          <p class="muted">
+            Sigurna passwordless autentifikacija sa magic link-om, TOTP verifikacijom i backup recovery kodovima u 
+            jednom jednostavnom i modernom prototipu aplikacije.
+          </p>
+          <p>
+            <span class="status">Magic link: 10 min / single-use</span>
+            <span class="status">Lockout: 5 neuspeha</span>
+            <span class="status">Recovery token: 24h</span>
+          </p>
+          <p><a href="/debug/db">Otvori pregled baze u browseru</a></p>
+        </article>
+
+        <article class="card">
+          <h2>1. Magic link login</h2>
+          <form action="/auth/request-login" method="post">
+            <label>
+              Primarni email
+              <input type="email" name="email" placeholder="ime@primer.com" required />
+            </label>
+            <button type="submit">Posalji magic link</button>
+          </form>
+
+          <% if (emailPreview) { %>
+            <div style="margin-top: 14px">
+              <div class="muted">SMTP preview</div>
+              <div class="preview"><%= emailPreview %></div>
+            </div>
+          <% } %>
+
+          <% if (preAuthUser) { %>
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 22px 0" />
+            <h2>2. TOTP potvrda</h2>
+            <p class="muted">Nalog <strong><%= preAuthUser.email %></strong> zahteva TOTP potvrdu.</p>
+            <form action="/auth/verify-totp" method="post">
+              <label>
+                TOTP kod
+                <input type="text" name="token" inputmode="numeric" placeholder="123456" required />
+              </label>
+              <button type="submit">Potvrdi TOTP</button>
+            </form>
+          <% } %>
+        </article>
+      </section>
+
+      <section class="grid">
+        <% if (!user) { %>
+          <article class="card">
+            <h2>Recovery pristup</h2>
+            <form action="/auth/recovery-request" method="post">
+              <label>
+                Primarni email naloga
+                <input type="email" name="email" placeholder="ime@primer.com" required />
+              </label>
+              <button class="secondary" type="submit">Posalji recovery link</button>
+            </form>
+
+            <% if (recoveryPreview) { %>
+              <div style="margin-top: 14px">
+                <div class="muted">Recovery email preview</div>
+                <div class="preview"><%= recoveryPreview %></div>
+              </div>
+            <% } %>
+
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 22px 0" />
+
+            <form action="/auth/recovery-code-login" method="post">
+              <label>
+                Primarni email
+                <input type="email" name="email" required />
+              </label>
+              <label>
+                Recovery code
+                <input type="text" name="code" placeholder="ABC123-DEF456" required />
+              </label>
+              <button class="secondary" type="submit">Login recovery kodom</button>
+            </form>
+          </article>
+        <% } %>
+
+        <article class="card">
+          <h2>Status sesije</h2>
+          <% if (user) { %>
+            <p><strong>Ulogovan:</strong> <%= user.email %></p>
+            <p><strong>Sekundarni email:</strong> <%= user.secondary_email || 'nije postavljen' %></p>
+            <p><strong>TOTP:</strong> <%= user.totp_enabled ? 'aktivan' : 'nije aktivan' %></p>
+            <form action="/auth/logout" method="post">
+              <button type="submit">Logout</button>
+            </form>
+          <% } else { %>
+            <p class="muted">Nema aktivne sesije. Prijavite se magic linkom ili recovery mehanizmom.</p>
+          <% } %>
+        </article>
+
+        <% if (user) { %>
+          <article class="card">
+            <h2>Postavke bezbednosti</h2>
+
+            <form action="/auth/secondary-email" method="post">
+              <label>
+                Sekundarni email za recovery
+                <input type="email" name="secondaryEmail" value="<%= user.secondary_email || '' %>" required />
+              </label>
+              <button class="secondary" type="submit">Sacuvaj sekundarni email</button>
+            </form>
+
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 22px 0" />
+
+            <% if (!user.totp_secret) { %>
+              <form action="/auth/setup-totp" method="post">
+                <button type="submit">Generisi TOTP secret i QR</button>
+              </form>
+            <% } %>
+
+            <% if (totpQrDataUrl && !user.totp_enabled) { %>
+              <div style="display: grid; gap: 12px; margin-top: 14px">
+                <img class="qr" src="<%= totpQrDataUrl %>" alt="TOTP QR code" />
+                <form action="/auth/enable-totp" method="post">
+                  <label>
+                    Aktivacioni TOTP kod
+                    <input type="text" name="token" inputmode="numeric" placeholder="123456" required />
+                  </label>
+                  <button type="submit">Aktiviraj TOTP</button>
+                </form>
+              </div>
+            <% } %>
+
+            <% if (user.totp_enabled) { %>
+              <p class="muted">TOTP je aktivan. Ako izgubite authenticator, koristite recovery link ili recovery kod.</p>
+            <% } %>
+
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 22px 0" />
+
+            <% if (user.totp_enabled) { %>
+              <form action="/auth/recovery-codes/regenerate" method="post">
+                <button class="secondary" type="submit">Regenerisi recovery kodove</button>
+              </form>
+            <% } else { %>
+              <p class="muted">Recovery kodovi su dostupni tek nakon aktivacije TOTP-a.</p>
+            <% } %>
+          </article>
+
+          <article class="card">
+            <h2>Recovery kodovi</h2>
+            <% if (recoveryCodes.length) { %>
+              <ul class="code-list">
+                <% recoveryCodes.forEach((code) => { %>
+                  <li><strong><%= code %></strong></li>
+                <% }) %>
+              </ul>
+              <p class="muted">Kodovi se prikazuju samo odmah nakon generisanja. Svaki kod je jednokratan.</p>
+            <% } else { %>
+              <p class="muted">Recovery kodovi ce biti prikazani nakon aktivacije TOTP-a ili regeneracije.</p>
+            <% } %>
+          </article>
+
+          <article class="card">
+            <h2>Trusted devices</h2>
+            <% if (trustedDevices.length) { %>
+              <div style="display: grid; gap: 10px">
+                <% trustedDevices.forEach((device) => { %>
+                  <div class="device-row">
+                    <strong><%= device.label %></strong>
+                    <div class="muted">Kreiran: <%= device.created_at %></div>
+                    <div class="muted">Poslednja upotreba: <%= device.last_used_at || 'nema' %></div>
+                    <div class="muted">Vazi do: <%= device.expires_at %></div>
+                  </div>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <p class="muted">Jos nema trusted uredjaja.</p>
+            <% } %>
+          </article>
+        <% } %>
+      </section>
+    </main>
+  </body>
+  </html>

@@ -1,0 +1,25 @@
+{
+  "name": "passwordless-auth",
+  "version": "1.0.0",
+  "description": "Minimal passwordless authentication demo with magic links, TOTP, and recovery flows.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "nodemailer": "^6.10.0",
+    "qrcode": "^1.5.4",
+    "speakeasy": "^2.0.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
